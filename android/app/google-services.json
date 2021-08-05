@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "956760212274",
+    "project_id": "weker-af007",
+    "storage_bucket": "weker-af007.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956760212274:android:d42ebb49f5310c0bf60d2b",
+        "android_client_info": {
+          "package_name": "com.weker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956760212274-7c0qkh41d74rlk8rl5uiamgd0f35s7mn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWGJQz1w7XazZ0f0v50kEcz4q4CBHQ474"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956760212274-7c0qkh41d74rlk8rl5uiamgd0f35s7mn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
