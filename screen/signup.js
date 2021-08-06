@@ -63,7 +63,7 @@ class Signup extends Component {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.log(errorCode, errorMessage)
-                Alert.alert("gak masuk tolol")
+                Alert.alert("gak masuk")
             });
         })
         .catch((error) => {

@@ -1,61 +1,135 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
-import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
+import { firebase } from '@react-native-firebase/database';
+import React, { Component } from 'react'
+import { Text, StyleSheet, View, TouchableOpacity, AsyncStorage } from 'react-native'
+import { Button } from 'react-native-elements/dist/buttons/Button';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
-export default class ExampleFour extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tableHead: ['User', 'page user'],
-            tableData: [
-                ['1', '4'],
-                
-            ]
-        }
+export default class admin extends Component {
+
+    state = {
+        Allusers: {},
+        email: '',
+        user:'',
+        phone:''
     }
 
-    _alertIndex(index) {
-        Alert.alert(`This is row ${index + 1}`);
+    async componentDidMount() {
+        await this.getAdminUserInfo();
+        await this.getUsers();
+    }
+
+    getAdminUserInfo = async () => {
+        const userId = await AsyncStorage.getItem('uid');
+        console.log(userId);
+        firebase.database().ref('/users/' + userId ).once('value')
+        .then((snapshot) => {
+            const user = snapshot.val();
+            console.log('user login: ', user);
+            this.setState({
+                user: user.username,
+                email: user.email,
+                phone: user.phone
+            })
+            })
+            .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode, errorMessage)
+            Alert.alert("Gagal")
+        });
+    }
+
+    getUsers = () => {
+        firebase.database().ref('/users/').on('value', (snapshot) => {
+            const users = snapshot.val();
+            console.log('user login: ', users);
+            this.setState({
+                Allusers: users
+
+            })
+        });
+    }
+    
+    handleUser = (uid) => {
+        console.log('oiii');
+        this.props.navigation.navigate('User', {uid, from_admin: true})
     }
 
     render() {
-        const state = this.state;
-        const element = (data, index) => (
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('User')}>
-                <View style={styles.btn}>
-                    <Text style={styles.btnText}>button</Text>
-                </View>
-            </TouchableOpacity>
-        );
-
         return (
             <View style={styles.container}>
-                <Text style={styles.text1}>admin WEKER</Text>
-                <Table borderStyle={{ borderColor: 'transparent' }}>
-                    <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
-                    {
-                        state.tableData.map((rowData, index) => (
-                            <TableWrapper key={index} style={styles.row}>
-                                {
-                                    rowData.map((cellData, cellIndex) => (
-                                        <Cell key={cellIndex} data={cellIndex === 1 ? element(cellData, index) : cellData} textStyle={styles.text} />
-                                    ))
-                                }
-                            </TableWrapper>
-                        ))
-                    }
-                </Table>
+                <Text style={styles.txt1}>{this.state.user}</Text>
+                <View style={styles.field}>
+                    <View style={styles.vfield}>
+                        <ScrollView>
+                        {Object.keys(this.state.Allusers).map(key => {
+                            return (
+                                <TouchableOpacity style={styles.btn} 
+                                onPress={() => this.handleUser(key)}> 
+                                <Text style={styles.txtbtn} >{this.state.Allusers[key].username}</Text> 
+                                </TouchableOpacity>
+                            )
+                        })}
+
+                        </ScrollView>
+                    </View>
+
+                </View>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#74b9ff' },
-    head: { height: 40, backgroundColor: '#fff200' },
-    text: { margin: 6 },
-    row: { flexDirection: 'row', backgroundColor: 'white' },
-    btn: { width: 58, height: 18, backgroundColor: '#78B7BB', borderRadius: 2 },
-    btnText: { textAlign: 'center', color: '#fff' },
-    text1:{fontSize:25,marginBottom:20,color:'white'}
-});
+    container: {
+        flex: 1,
+        backgroundColor: "#74b9ff",
+
+    },
+    txt1: {
+        fontSize: 40,
+        marginTop: 30,
+        marginLeft: 10,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    txt2: {
+        fontSize: 18,
+        marginLeft: 25,
+        color: 'white'
+    },
+    field: {
+        backgroundColor: 'white',
+        width: '90%',
+        height: '60%',
+        marginHorizontal: 20,
+        marginTop: 30,
+        borderRadius: 30,
+
+    },
+    vfield: {
+        flex: 1,
+        marginTop: 10,
+        marginBottom:10,
+        marginHorizontal:10
+    },
+    txtbtn: {
+        fontSize: 35,
+        marginHorizontal: 15,
+        marginBottom:5,
+        color: '#636e72'
+
+    },
+    txtfield1: {
+        marginRight: 30
+    },
+    btn: {
+        width: '90%',
+        height:'15%',
+        backgroundColor: "#fff200",
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop:10
+    }
+})

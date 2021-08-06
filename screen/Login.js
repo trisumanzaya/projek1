@@ -31,13 +31,12 @@ class Login extends Component {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(res => {
                 const userId = res.user.uid;
-                console.log('succes: ', res);
+                console.log('succes: ', res.user.uid);
                 AsyncStorage.setItem('uid', userId)
                 firebase.database().ref('/users/' + userId ).once('value')
                 .then((snapshot) => {
                     const user = snapshot.val();
                     console.log('user: ', user);
-                    // const uuid = AsyncStorage.getItem('uuid')
                     if (user.role === 'admin') {
                         Alert.alert("Ini Admin")
                     this.props.navigation.navigate('Admin')
