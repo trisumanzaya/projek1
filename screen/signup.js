@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react'
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image, Alert, ImageBackground,ScrollView } from 'react-native'
 import firebase from './config/FIREBASE'
 import { database } from './config/FIREBASE'
 
@@ -11,7 +11,8 @@ class Signup extends Component {
         email: '',
         password: '',
         nama: '',
-        phone: ''
+        kodeSatker: '',
+        namaInstansi:''
     }
 
     handleChangeTextemail = (e) => {
@@ -33,109 +34,107 @@ class Signup extends Component {
             nama: e,
         })
     }
-    handleChangeTextPhone = (e) => {
+    handleChangeTextKodeSatker = (e) => {
         // console.log(e)
         this.setState({
-            phone: e,
+            kodeSatker: e,
+        })
+    }
+    handleChangeTextInstansi = (e) => {
+        // console.log(e)
+        this.setState({
+            namaInstansi: e,
         })
     }
 
 
 
     handleRegisterSubmit = () => {
-        const { email, password, nama, phone } = this.state;
-        console.log('data before send : ', email, password, nama, phone)
+        const { email, password, nama, kodeSatker,namaInstansi } = this.state;
+        console.log('data before send : ', email, password, nama, kodeSatker,namaInstansi)
 
 
-        firebase.auth().createUserWithEmailAndPassword(email, password, nama, phone)
-        .then(res => {
-            console.log('succes: ', res); 
-            firebase.database().ref('users/'  + res.user.uid ).set({
-                username: nama,
-                email: email,
-                phone: phone,
-                role: 'user'
-            }).then(() =>{
-                Alert.alert("Sign in succes")
-                this.props.navigation.navigate('Login')
+        firebase.auth().createUserWithEmailAndPassword(email, password, nama, kodeSatker,namaInstansi)
+            .then(res => {
+                console.log('succes: ', res);
+                firebase.database().ref('users/' + res.user.uid).set({
+                    username: nama,
+                    email: email,
+                    kodeSatker: kodeSatker,
+                    namaInstansi: namaInstansi,
+                    role: 'user'
+                }).then(() => {
+                    Alert.alert("Sign in succes")
+                    this.props.navigation.navigate('Login')
+                })
+                    .catch((error) => {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        console.log(errorCode, errorMessage)
+                        Alert.alert("gak masuk")
+                    });
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.log(errorCode, errorMessage)
-                Alert.alert("gak masuk")
+                Alert.alert("Masukan email & pasword dengan benar")
             });
-        })
-        .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log(errorCode, errorMessage)
-            Alert.alert("Masukan email & pasword dengan benar")
-        });
-
-       
 
 
-        
+
+
+
     }
-    // const [email, Setemail] = useState();
-    // const [password, SetPassword] = useState();
 
-    // const AuthSign = async () => {
-    //     try {
-    //     const response = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDB9YEIUhVO3SOWq1A4yo49KYFeBmU-oI4", {
-    //         method: "POST",
-    //         headers: {
-    //             'Conten-type': 'application/json'
-    //         },
-    //         body: JSON.stringify({
-    //             email: email,
-    //             password: password,
-    //             returnSecureToken: true
-    //         })
-    //     })
-    //     const resData = await response.json()
-    //     console.log(resData)
-    // }catch (error){
-    //     console.log(error)
-    // }
-    // }
     render() {
         return (
             <View style={styles.container} >
-                <Image style={styles.img}
-                    source={require('./image/WEKER.png')} />
-                <Text style={styles.Logo}> REGISTER</Text>
-                <View style={styles.inputView}>
-                    <TextInput id="email" style={styles.inputText}
-                        placeholder="email"
-                        placeholderTextColor="#636e72"
-                        onChangeText={this.handleChangeTextemail} />
-                </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                        secureTextEntry
-                        id="password"
-                        style={styles.inputText}
-                        placeholder="password"
-                        placeholderTextColor="#636e72"
-                        onChangeText={this.handleChangeTextPasword} />
-                </View>
-                <View style={styles.inputView}>
-                    <TextInput id="email" style={styles.inputText}
-                        placeholder="nama"
-                        placeholderTextColor="#636e72"
-                        onChangeText={this.handleChangeTextNama} />
-                </View>
-                <View style={styles.inputView}>
-                    <TextInput id="email" style={styles.inputText}
-                        placeholder="Phone number"
-                        placeholderTextColor="#636e72"
-                        onChangeText={this.handleChangeTextPhone} />
-                </View>
-                <TouchableOpacity style={styles.LoginBtn1} onPress={this.handleRegisterSubmit}>
-                    <Text style={styles.LoginText} >Sign Up</Text>
-                </TouchableOpacity>
+                    
+                <ImageBackground source={require('./image/background1.png')} resizeMode="cover" style={styles.gambar}>
+                
+                    <Text style={styles.Logo}> DAFTAR</Text>
+                    <Text style={styles.Logo}> WEKER</Text>
+                    <Image style={styles.img}
+                        source={require('./image/WEKER.png')} />
+                    <View style={styles.inputView}>
+                        <TextInput id="email" style={styles.inputText}
+                            placeholder="Email SATKER"
+                            placeholderTextColor="white"
+                            onChangeText={this.handleChangeTextemail} />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            secureTextEntry
+                            id="password"
+                            style={styles.inputText}
+                            placeholder="password"
+                            placeholderTextColor="white"
+                            onChangeText={this.handleChangeTextPasword} />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput id="email" style={styles.inputText}
+                            placeholder="nama"
+                            placeholderTextColor="white"
+                            onChangeText={this.handleChangeTextNama} />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput id="email" style={styles.inputText}
+                            placeholder="KODE SATKER"
+                            placeholderTextColor="white"
+                            onChangeText={this.handleChangeTextKodeSatker} />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput id="email" style={styles.inputText}
+                            placeholder="NAMA INSTANSI"
+                            placeholderTextColor="white"
+                            onChangeText={this.handleChangeTextInstansi} 
+                            />
+                    </View>
+                    <TouchableOpacity style={styles.LoginBtn1} onPress={this.handleRegisterSubmit}>
+                        <Text style={styles.LoginText} >Sign Up</Text>
+                    </TouchableOpacity>                            
+                </ImageBackground>
 
             </View>
         )
@@ -146,62 +145,47 @@ export default Signup;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#74b9ff",
+        backgroundColor: "white",
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    gambar: {
+        width: '100%',
+        height: '100%',
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     },
     Logo: {
         fontWeight: 'bold',
-        fontSize: 50,
-        color: '#636e72',
-        marginBottom: 40,
-        color: 'white'
+        fontSize: 40,
+        fontWeight:'bold',
+        color: '#273c75'
     },
     inputView: {
-        width: "80%",
-        backgroundColor: "#dfe6e9",
-        borderRadius: 25,
+        width: "70%",
+        backgroundColor: "#273c75",
         height: 50,
-        marginBottom: 10,
+        marginBottom: 5,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 5
     },
     inputText: {
         height: 50,
-        color: '#74b9ff'
-    },
-    LoginBtn: {
-        width: '65%',
-        backgroundColor: "#81ecec",
-        borderRadius: 25,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 10
-
+        color: 'white'
     },
     LoginBtn1: {
-        width: '65%',
-        backgroundColor: "#fff200",
-        borderRadius: 25,
+        width: '30%',
+        backgroundColor: "#e84118",
         height: 50,
         alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 30
+        justifyContent: 'center'
 
     },
-    LoginText: {
-        color: '#636e72'
-    },
-    Forget: {
-        color: 'white',
-        fontSize: 11,
-        marginTop: 10
-    },
     img: {
-        width: 100,
-        height: 100,
+        width:200,
+        height:130,
 
     }
 })

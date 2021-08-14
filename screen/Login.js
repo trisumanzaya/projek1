@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react'
-import { Text, View, StyleSheet, TextInput, TouchableOpacity ,Image,Alert, AsyncStorage} from 'react-native'
+import { Text, View, StyleSheet, TextInput, TouchableOpacity ,Image,Alert, AsyncStorage, ImageBackground} from 'react-native'
 import firebase from './config/FIREBASE'
 
 
@@ -42,7 +42,7 @@ class Login extends Component {
                     this.props.navigation.navigate('Admin')
                     } else {
                         Alert.alert("semoga tugas anda cepat selesai")
-                    this.props.navigation.navigate('User')
+                    this.props.navigation.navigate('UserHome')
                     }
                   });
             })
@@ -81,14 +81,16 @@ class Login extends Component {
     // }
     render() {
         return (
-            <View style={styles.container} >
+            <View style={styles.container}  >
+                <ImageBackground  source={require('./image/background1.png')} resizeMode="cover" style={styles.gambar}>
+                    
+                    <Text style={styles.Logo}>MASUK  WEKER</Text>
                 <Image  style={styles.img}
           			source={require('./image/WEKER.png')}/>
-                <Text style={styles.Logo}> DJBP WEKER</Text>
                 <View style={styles.inputView}>
                     <TextInput id="email" style={styles.inputText}
                         placeholder="email"
-                        placeholderTextColor="#636e72"
+                        placeholderTextColor="white"
                         onChangeText={this.handleChangeTextemail} />
                 </View>
                 <View style={styles.inputView}>
@@ -97,21 +99,20 @@ class Login extends Component {
                         id="password"
                         style={styles.inputText}
                         placeholder="password"
-                        placeholderTextColor="#636e72"
+                        placeholderTextColor="white"
                         onChangeText={this.handleChangeTextPasword} />
                 </View>
-                
+                <View style={styles.vbtnlogin}>
                 <TouchableOpacity style={styles.LoginBtn} onPress={this.handleLoginSubmit}>
                     <Text style={styles.LoginText} >Login</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.LoginBtn1} onPress={this.handleRegisterSubmit}>
                     <Text style={styles.LoginText} >Sign Up</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                    console.log('forget password')
-                }}>
-                    <Text style={styles.Forget} >forget password</Text>
-                </TouchableOpacity>
+                    
+                </View>
+
+                </ImageBackground>
             </View>
         )
     }
@@ -121,62 +122,65 @@ export default Login;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#74b9ff",
+        backgroundColor: "white",
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    gambar:{
+        width:'100%',
+        height:'100%',
+        flex:1,
         alignItems: 'center',
         justifyContent: 'center'
     },
     Logo: {
         fontWeight: 'bold',
         fontSize: 50,
-        color: '#636e72',
-        marginBottom: 40,
-        color: 'white'
+        color: '#273c75',
+        marginBottom:10,
+        marginLeft:50
+
+
+        
     },
     inputView: {
         width: "80%",
-        backgroundColor: "#dfe6e9",
-        borderRadius: 25,
+        backgroundColor: "#273c75",
         height: 50,
-        marginBottom: 20,
+        marginBottom: 10,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 5
     },
     inputText: {
         height: 50,
-        color: '#74b9ff'
+        color: 'white'
     },
     LoginBtn: {
-        width: '65%',
-        backgroundColor: "#81ecec",
-        borderRadius: 25,
+        width: '30%',
+        backgroundColor: "#e84118",
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop:20
+        marginRight:10
         
     },
     LoginBtn1: {
-        width: '65%',
-        backgroundColor: "#fff200",
-        borderRadius: 25,
+        width: '30%',
+        backgroundColor: "#e84118",
         height: 50,
         alignItems: 'center',
-        justifyContent: 'center',
-        marginTop:10
-        
+        justifyContent: 'center'
     },
     LoginText: {
-        color: '#636e72'
+        color: 'white'
     },
-    Forget: {
-        color: 'white',
-        fontSize: 11,
-        marginTop:20
+    vbtnlogin:{
+        flexDirection:'row'
     },
     img:{
-        width:100,
-        height:100,
+        width:200,
+        height:150,
 
     }
 })

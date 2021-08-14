@@ -10,7 +10,7 @@ export default class user extends Component {
         this.state = {
             email: '',
             user: '',
-            phone: '',
+            kodeSatker: '',
             from_admin: false,
             uid: '',
             work: '',
@@ -26,26 +26,26 @@ export default class user extends Component {
         let userId = await AsyncStorage.getItem('uid');
         if (this.state.from_admin) {
             userId = this.state.uid;
-        }
-        console.log(userId);
-        firebase.database().ref('/users/' + userId).once('value')
-            .then((snapshot) => {
-                const user = snapshot.val();
-                console.log('user login: ', user);
-                this.setState({
-                    user: user.username,
-                    email: user.email,
-                    phone: user.phone,
-                    todolist: user.todolist
+            console.log(userId);
+            firebase.database().ref('/users/' + userId).once('value')
+                .then((snapshot) => {
+                    const user = snapshot.val();
+                    console.log('user login: ', user);
+                    this.setState({
+                        user: user.username,
+                        email: user.email,
+                        phone: user.phone,
+                        todolist: user.todolist || {}
+                    })
                 })
-            })
-            .catch((error) => {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log(errorCode, errorMessage)
-                Alert.alert("Gagal")
-            });
-    }
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.log(errorCode, errorMessage)
+                    Alert.alert("Gagal")
+                });
+            }
+        }
     
     render() {
         return (

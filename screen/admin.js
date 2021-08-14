@@ -1,6 +1,6 @@
 import { firebase } from '@react-native-firebase/database';
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, TouchableOpacity, AsyncStorage } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, AsyncStorage, ImageBackground } from 'react-native'
 import { Button } from 'react-native-elements/dist/buttons/Button';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
@@ -10,7 +10,7 @@ export default class admin extends Component {
         Allusers: {},
         email: '',
         user:'',
-        phone:''
+        kodeSatker:''
     }
 
     async componentDidMount() {
@@ -28,7 +28,7 @@ export default class admin extends Component {
             this.setState({
                 user: user.username,
                 email: user.email,
-                phone: user.phone
+                kodeSatker: user.kodeSatker
             })
             })
             .catch((error) => {
@@ -51,20 +51,36 @@ export default class admin extends Component {
     }
     
     handleUser = (uid) => {
-        console.log('oiii');
-        this.props.navigation.navigate('User', {uid, from_admin: true})
+        console.log(uid);
+        this.props.navigation.navigate('InfoPekerja', {uid, from_admin: true})
+    }
+    handleButonBerita=()=>{
+        this.props.navigation.navigate('AdminBerita')
+    }
+    handleButonPesan=()=>{
+        this.props.navigation.navigate('adminUser')
     }
 
     render() {
         return (
             <View style={styles.container}>
+                <ImageBackground source={require('./image/background1.png')} resizeMode="cover" style={styles.gambar}>
                 <Text style={styles.txt1}>{this.state.user}</Text>
+                <View style={styles.vbtn1}>
+                    <TouchableOpacity style={styles.btn1} onPress={this.handleButonBerita}>
+                        <Text style={styles.txtbtn1}>BERITA</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btn1} onPress={this.handleButonPesan}>
+                        <Text style={styles.txtbtn1}>PESAN</Text>
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.field}>
+                <Text>list satker</Text>
                     <View style={styles.vfield}>
                         <ScrollView>
                         {Object.keys(this.state.Allusers).map(key => {
                             return (
-                                <TouchableOpacity style={styles.btn} 
+                                <TouchableOpacity 
                                 onPress={() => this.handleUser(key)}> 
                                 <Text style={styles.txtbtn} >{this.state.Allusers[key].username}</Text> 
                                 </TouchableOpacity>
@@ -75,6 +91,8 @@ export default class admin extends Component {
                     </View>
 
                 </View>
+
+                </ImageBackground>
             </View>
         )
     }
@@ -83,23 +101,44 @@ export default class admin extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#74b9ff",
+        backgroundColor: "white",
 
     },
+    gambar:{
+        width:'100%',
+        height:'100%',
+        flex:1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     txt1: {
-        fontSize: 40,
-        marginTop: 30,
-        marginLeft: 10,
         fontWeight: 'bold',
-        color: 'white'
+        fontSize: 50,
+        color: '#273c75',
+        marginBottom:10,
     },
     txt2: {
         fontSize: 18,
         marginLeft: 25,
         color: 'white'
     },
+    vbtn1:{
+        flexDirection:'row',
+
+    },
+    btn1:{
+        backgroundColor:'#e84118',
+        alignItems:'center',
+        justifyContent:'center',
+        width :80,
+        height:40,
+        marginRight:25
+    },
+    txtbtn1:{
+        color:'white'
+    },
     field: {
-        backgroundColor: 'white',
+        
         width: '90%',
         height: '60%',
         marginHorizontal: 20,
@@ -111,10 +150,13 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 10,
         marginBottom:10,
-        marginHorizontal:10
+        marginHorizontal:10,
+        justifyContent:'center',
+        flexDirection:'row'
+
     },
     txtbtn: {
-        fontSize: 35,
+        fontSize: 20,
         marginHorizontal: 15,
         marginBottom:5,
         color: '#636e72'
@@ -123,13 +165,4 @@ const styles = StyleSheet.create({
     txtfield1: {
         marginRight: 30
     },
-    btn: {
-        width: '90%',
-        height:'15%',
-        backgroundColor: "#fff200",
-        borderRadius: 25,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop:10
-    }
 })
